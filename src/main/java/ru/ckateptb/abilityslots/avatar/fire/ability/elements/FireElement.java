@@ -1,4 +1,4 @@
-package ru.ckateptb.abilityslots.avatar.fire;
+package ru.ckateptb.abilityslots.avatar.fire.ability.elements;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +12,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.data.Lightable;
 import ru.ckateptb.abilityslots.avatar.fire.ability.passive.BlueFire;
+import ru.ckateptb.abilityslots.avatar.fire.ability.passive.ColorfulFire;
 import ru.ckateptb.abilityslots.category.AbstractAbilityCategory;
 import ru.ckateptb.abilityslots.common.util.MaterialUtils;
 import ru.ckateptb.abilityslots.user.AbilityUser;
@@ -36,11 +37,11 @@ public class FireElement extends AbstractAbilityCategory {
     private static long minFireDuration = 5000;
 
     private final String name = "Fire";
-    private String displayName = "§4Fire";
-    private String prefix = "§4";
+    private String displayName = "§cFire";
+    private String prefix = "§c";
 
     public static void display(AbilityUser user, Location location, int amount, double extra, float offsetX, float offsetY, float offsetZ) {
-        display(user, location, amount, extra, offsetX, offsetY, offsetZ, ThreadLocalRandom.current().nextInt(2) == 0);
+        display(user, location, amount, extra, offsetX, offsetY, offsetZ, ThreadLocalRandom.current().nextInt(4) == 0);
     }
 
     public static void display(AbilityUser user, Location location, int amount, float offsetX, float offsetY, float offsetZ, boolean playSound) {
@@ -51,6 +52,9 @@ public class FireElement extends AbstractAbilityCategory {
         World world = location.getWorld();
         if (playSound) {
             world.playSound(location, Sound.BLOCK_FIRE_AMBIENT, 1, 1);
+        }
+        if (isColorfulFireBender(user)) {
+            ColorfulFire.display(user, location, amount, extra, offsetX, offsetY, offsetZ);
         }
         (isBlueFireBender(user) ? Particle.SOUL_FIRE_FLAME : Particle.FLAME).display(location, amount, offsetX, offsetY, offsetZ, extra);
     }
@@ -78,7 +82,7 @@ public class FireElement extends AbstractAbilityCategory {
                 furnace.setBurnTime((short) 800);
                 light = true;
             }
-        }
+        }//Вообще я даже сделал SparklingFire который это делает
         if (light || MaterialUtils.isCampfire(block)) {
             Lightable data = (Lightable) block.getBlockData();
             if (!data.isLit()) {
@@ -99,5 +103,9 @@ public class FireElement extends AbstractAbilityCategory {
 
     public static boolean isBlueFireBender(AbilityUser user) {
         return !user.getActiveAbilities(BlueFire.class).isEmpty();
+    }
+
+    public static boolean isColorfulFireBender(AbilityUser user) {
+        return !user.getActiveAbilities(ColorfulFire.class).isEmpty();
     }
 }

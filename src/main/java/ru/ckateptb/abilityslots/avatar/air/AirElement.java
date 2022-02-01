@@ -2,11 +2,14 @@ package ru.ckateptb.abilityslots.avatar.air;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.world.level.block.TntBlock;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import ru.ckateptb.abilityslots.category.AbstractAbilityCategory;
 import ru.ckateptb.abilityslots.user.AbilityUser;
 import ru.ckateptb.tablecloth.config.ConfigField;
@@ -47,7 +50,29 @@ public class AirElement extends AbstractAbilityCategory {
                 world.playSound(location, Sound.ENTITY_CREEPER_HURT, 1, 2);
             }
         }
-        Particle.SPELL.display(location, amount, offsetX, offsetY, offsetZ, extra);
+        //Particle.SPELL.display(location, amount, offsetX, offsetY, offsetZ, extra);
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        //if(random.nextBoolean())
+        Particle.BUBBLE_POP.display(location.clone()
+                        .add(
+                                random.nextFloat(-1, 1) * offsetX + 0.1 * random.nextFloat(-1, 1),
+                                random.nextFloat(-1, 1) * offsetY + 0.1 * random.nextFloat(-1, 1),
+                                random.nextFloat(-1, 1) * offsetZ + 0.1 * random.nextFloat(-1, 1)
+                        ), 0,
+                random.nextFloat(-1, 1) * offsetX,
+                1,
+                random.nextFloat(-1, 1) * offsetZ, 0.05);
+        int i = 0;
+        do {
+            location.getWorld().spawnParticle(org.bukkit.Particle.SPELL_MOB_AMBIENT,
+                    amount > 0 ? location.clone()
+                            .add(random.nextFloat(-1, 1) * offsetX, random.nextFloat(-1, 1) * offsetY, random.nextFloat(-1, 1) * offsetZ)
+                            : location.clone()
+                            .add(random.nextFloat(-1, 1) * offsetX * extra, random.nextFloat(-1, 1) * offsetY * extra, random.nextFloat(-1, 1) * offsetZ * extra),
+                    0,
+                    221 / 255D, 243 / 255D, 243 / 255D, 1);
+            i++;
+        } while (i <= amount);
     }
 
     public static void sound(Location location) {

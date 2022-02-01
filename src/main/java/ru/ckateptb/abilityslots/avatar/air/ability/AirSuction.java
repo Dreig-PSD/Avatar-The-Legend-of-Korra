@@ -72,13 +72,12 @@ public class AirSuction extends Ability {
 
     @Override
     public ActivateResult activate(ActivationMethod method) {
-        AirSuction ability = user.getAbilityInstances(AirSuction.class).stream()
-                .filter(suction -> suction.getDirection() == null)
-                .findFirst().orElse(this);
+        AbilityInstanceService instanceService = getAbilityInstanceService();
+        AirSuction ability = instanceService.getAbilityUserInstances(user, AirSuction.class).stream().filter(suction -> suction.getDirection() == null).findFirst().orElse(this);
         if (method == ActivationMethod.SNEAK && !ability.selectOriginal()) {
             return ActivateResult.NOT_ACTIVATE;
         }
-        if (ActivationMethod.LEFT_CLICK.equals(method) && user.removeEnergy(this)) {
+        if (method == ActivationMethod.LEFT_CLICK && user.removeEnergy(this)) {
             ability.launch();
         }
         return ability == this ? ActivateResult.ACTIVATE : ActivateResult.NOT_ACTIVATE;

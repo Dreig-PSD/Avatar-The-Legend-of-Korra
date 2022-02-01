@@ -13,7 +13,7 @@ import ru.ckateptb.abilityslots.ability.info.AbilityInfo;
         activationMethods = {ActivationMethod.PASSIVE},
         category = "fire",
         description = "This passive ability allows FireBender to manipulate the blue fire.\nBlue flames have a higher temperature than normal yellow flames, and therefore higher power.",
-        instruction = "Passive Ability",
+        instruction = "Passive Ability, that increases damage of the fire abilities.",
         canBindToSlot = false
 )
 public class BlueFire extends Ability {

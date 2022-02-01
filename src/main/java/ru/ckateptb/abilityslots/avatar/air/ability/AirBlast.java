@@ -70,13 +70,12 @@ public class AirBlast extends Ability {
 
     @Override
     public ActivateResult activate(ActivationMethod method) {
-        AirBlast ability = user.getAbilityInstances(AirBlast.class).stream()
-                .filter(blast -> blast.getDirection() == null)
-                .findFirst().orElse(this);
+        AbilityInstanceService instanceService = getAbilityInstanceService();
+        AirBlast ability = instanceService.getAbilityUserInstances(user, AirBlast.class).stream().filter(blast -> blast.getDirection() == null).findFirst().orElse(this);
         if (method == ActivationMethod.SNEAK && !ability.selectOriginal()) {
             return ActivateResult.NOT_ACTIVATE;
         }
-        if (ActivationMethod.LEFT_CLICK.equals(method) && user.removeEnergy(this)) {
+        if (method == ActivationMethod.LEFT_CLICK && user.removeEnergy(this)) {
             ability.launch();
         }
         return ability == this ? ActivateResult.ACTIVATE : ActivateResult.NOT_ACTIVATE;

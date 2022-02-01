@@ -56,7 +56,8 @@ public class AirPunch extends Ability {
 
     @Override
     public ActivateResult activate(ActivationMethod method) {
-        for (AirPunch punch : user.getAbilityInstances(AirPunch.class)) {
+        AbilityInstanceService abilityInstanceService = getAbilityInstanceService();
+        for (AirPunch punch : abilityInstanceService.getAbilityUserInstances(user, getClass())) {
             punch.createShot();
             return ActivateResult.NOT_ACTIVATE;
         }

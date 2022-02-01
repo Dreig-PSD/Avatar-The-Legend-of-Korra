@@ -61,6 +61,11 @@ tasks {
     withType<JavaCompile> {
         options.encoding = "UTF-8"
     }
+    register<Copy>("deploy") {
+        from(layout.buildDirectory.dir("libs/avatar-the-legends-of-korra-1.0.0-SNAPSHOT.jar"))
+        into("D:/MyASServer/plugins/AbilitySlots/abilities")
+    }
+    //так, на чём остановились?
 }
 
 publishing {

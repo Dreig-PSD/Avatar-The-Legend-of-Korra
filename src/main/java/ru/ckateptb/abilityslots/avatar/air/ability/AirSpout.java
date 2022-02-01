@@ -69,7 +69,7 @@ public class AirSpout extends Ability {
 
     @Override
     public ActivateResult activate(ActivationMethod method) {
-        if (user.destroyInstances(AirSpout.class)
+        if (getAbilityInstanceService().destroyInstanceType(user, getClass())
                 || livingEntity.getEyeLocation().getBlock().isLiquid()
                 || user.getDistanceAboveGround() > heightBuffer + heightBuffer) {
             return ActivateResult.NOT_ACTIVATE;
@@ -164,12 +164,11 @@ public class AirSpout extends Ability {
         public void onPlayerMove(PlayerMoveEvent event) {
             LivingEntity entity = user.getEntity();
             if (event.getPlayer().equals(entity)) {
-                ImmutableVector velocity = new ImmutableVector(entity.getVelocity()).setY(0);
-//                ImmutableVector velocity = new ImmutableVector(event.getTo().clone().subtract(event.getFrom())).setY(0);
+                ImmutableVector velocity = new ImmutableVector(event.getTo().clone().subtract(event.getFrom())).setY(0);
                 if (velocity.length() > maxSpeed) {
                     velocity = velocity.normalize().multiply(maxSpeed);
+                    AbilityTarget.of(entity).setVelocity(velocity, spout);
                 }
-                AbilityTarget.of(entity).setVelocity(velocity, spout);
             }
         }
     }
